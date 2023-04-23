@@ -12,6 +12,7 @@ import java.awt.Color;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
+import Controller.ReservaController;
 import modelo.Reserva;
 
 import java.awt.Font;
@@ -41,6 +42,7 @@ public class ReservasView extends JFrame {
 	int xMouse, yMouse;
 	private JLabel labelExit;
 	private JLabel labelAtras;
+	private ReservaController reservaController; 
 
 	/**
 	 * Launch the application.
@@ -76,7 +78,7 @@ public class ReservasView extends JFrame {
 		setLocationRelativeTo(null);
 		setUndecorated(true);
 		
-
+		this.reservaController= new ReservaController();
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(null);
@@ -288,19 +290,23 @@ public class ReservasView extends JFrame {
 					boolean isAfter = dateOut.after(dateIn);
 					System.out.println(isAfter );
 					if (isAfter) {
-						//Realice el calculo
+						//Realiza calculo de dias y valor de reserva
 						long fechaInicialMs = dateIn.getTime();
 						long fechaFinalMs = dateOut.getTime();
 						//long diferencia = fechaFinalMs - fechaInicialMs;
 						//double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-						Reserva nuevareserva = new Reserva();
-						double dias=nuevareserva.cantDias(fechaInicialMs, fechaFinalMs);
-						double tarifa=500;
-						System.out.println("dias= " + dias + " tarifa= "+tarifa+ " valor= "+(tarifa*dias));
+						//Reserva nuevareserva = new Reserva();
+						//ReservaController reservaController = new ReservaController();
+						//double dias=nuevareserva.cantDias(fechaInicialMs, fechaFinalMs);
+						//double tarifa=500;
+						//System.out.println("dias= " + dias + " tarifa= "+tarifa+ " valor= "+(tarifa*dias));
 						//ReservasView.txtValor.setText(String.valueOf(dias*tarifa)); 
-						ReservasView.txtValor.setText(String.valueOf(nuevareserva.valor(fechaInicialMs, fechaFinalMs)));
+						//ReservasView.txtValor.setText(String.valueOf(nuevareserva.valorReserva(fechaInicialMs, fechaFinalMs)));
+						String valorReserva = String.valueOf(reservaController.calcularValor(fechaInicialMs, fechaFinalMs));
+						ReservasView.txtValor.setText(valorReserva);
 						
 					}else {
+						
 						//mande el mensaje
 						JOptionPane.showMessageDialog(null, "La Fecha de Salida debe ser posterior  a la de entrada");
 					}
@@ -336,6 +342,7 @@ public class ReservasView extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				//System.out.println("Fecha-in: "+ ReservasView.txtFechaEntrada.getDate());// ACAAAAAAAAAAAAAAAAA/&&%$#%$#"#
 				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
+					System.out.println(txtFormaPago.getSelectedItem());
 					RegistroHuesped registro = new RegistroHuesped();
 					registro.setVisible(true);
 				} else {

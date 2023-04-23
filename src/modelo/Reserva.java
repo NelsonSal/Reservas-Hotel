@@ -17,7 +17,7 @@ public class Reserva {
 		return dias;
 	}
 	
-	public double valor(long fechaIn, long fechaOut) {
+	public double valorReserva(long fechaIn, long fechaOut) {
 		long diferencia = fechaOut - fechaIn;
 		double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
 		valor=tarifa*dias;
