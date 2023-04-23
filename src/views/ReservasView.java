@@ -11,6 +11,9 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
+
+import modelo.Reserva;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -286,9 +289,20 @@ public class ReservasView extends JFrame {
 					System.out.println(isAfter );
 					if (isAfter) {
 						//Realice el calculo
+						long fechaInicialMs = dateIn.getTime();
+						long fechaFinalMs = dateOut.getTime();
+						//long diferencia = fechaFinalMs - fechaInicialMs;
+						//double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+						Reserva nuevareserva = new Reserva();
+						double dias=nuevareserva.cantDias(fechaInicialMs, fechaFinalMs);
+						double tarifa=500;
+						System.out.println("dias= " + dias + " tarifa= "+tarifa+ " valor= "+(tarifa*dias));
+						//ReservasView.txtValor.setText(String.valueOf(dias*tarifa)); 
+						ReservasView.txtValor.setText(String.valueOf(nuevareserva.valor(fechaInicialMs, fechaFinalMs)));
+						
 					}else {
 						//mande el mensaje
-						JOptionPane.showMessageDialog(null, "La Fechas de Salida debe ser posterior  ala de entrada");
+						JOptionPane.showMessageDialog(null, "La Fecha de Salida debe ser posterior  a la de entrada");
 					}
 				}
 				
@@ -298,9 +312,9 @@ public class ReservasView extends JFrame {
 		
 		txtValor = new JTextField();
 		txtValor.setBackground(SystemColor.text);
-		txtValor.setHorizontalAlignment(SwingConstants.CENTER);
+		txtValor.setHorizontalAlignment(SwingConstants.LEFT);
 		txtValor.setForeground(Color.BLACK);
-		txtValor.setBounds(78, 328, 43, 33);
+		txtValor.setBounds(78, 328, 205, 33);
 		txtValor.setEditable(false);
 		txtValor.setFont(new Font("Roboto Black", Font.BOLD, 17));
 		txtValor.setBorder(javax.swing.BorderFactory.createEmptyBorder());

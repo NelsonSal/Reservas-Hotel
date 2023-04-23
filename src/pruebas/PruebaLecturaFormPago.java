@@ -18,7 +18,7 @@ public class PruebaLecturaFormPago {
 		
 	
 	
-		List<FormaDePago> resultado = new ArrayList<>();
+		//List<FormaDePago> resultado = new ArrayList<>();
 		ConnectionFactory factory = new ConnectionFactory();
 		final Connection con =factory.recuperaConexion(); 
 		try(con){
