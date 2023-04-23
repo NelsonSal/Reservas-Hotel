@@ -43,6 +43,7 @@ public class ReservasView extends JFrame {
 	private JLabel labelExit;
 	private JLabel labelAtras;
 	private ReservaController reservaController; 
+	private String valorReserva;
 
 	/**
 	 * Launch the application.
@@ -281,6 +282,8 @@ public class ReservasView extends JFrame {
 		txtFechaSalida.setBorder(new LineBorder(new Color(255, 255, 255), 0));
 		panel.add(txtFechaSalida);
 		txtFechaSalida.addPropertyChangeListener(new PropertyChangeListener() {
+			
+
 			public void propertyChange(PropertyChangeEvent evt) {
 				Date dateIn = ReservasView.txtFechaEntrada.getDate();
 				Date dateOut = ReservasView.txtFechaSalida.getDate();
@@ -293,16 +296,7 @@ public class ReservasView extends JFrame {
 						//Realiza calculo de dias y valor de reserva
 						long fechaInicialMs = dateIn.getTime();
 						long fechaFinalMs = dateOut.getTime();
-						//long diferencia = fechaFinalMs - fechaInicialMs;
-						//double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-						//Reserva nuevareserva = new Reserva();
-						//ReservaController reservaController = new ReservaController();
-						//double dias=nuevareserva.cantDias(fechaInicialMs, fechaFinalMs);
-						//double tarifa=500;
-						//System.out.println("dias= " + dias + " tarifa= "+tarifa+ " valor= "+(tarifa*dias));
-						//ReservasView.txtValor.setText(String.valueOf(dias*tarifa)); 
-						//ReservasView.txtValor.setText(String.valueOf(nuevareserva.valorReserva(fechaInicialMs, fechaFinalMs)));
-						String valorReserva = String.valueOf(reservaController.calcularValor(fechaInicialMs, fechaFinalMs));
+						valorReserva = String.valueOf(reservaController.calcularValor(fechaInicialMs, fechaFinalMs));
 						ReservasView.txtValor.setText(valorReserva);
 						
 					}else {
@@ -343,6 +337,10 @@ public class ReservasView extends JFrame {
 				//System.out.println("Fecha-in: "+ ReservasView.txtFechaEntrada.getDate());// ACAAAAAAAAAAAAAAAAA/&&%$#%$#"#
 				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
 					System.out.println(txtFormaPago.getSelectedItem());
+					System.out.println(valorReserva);
+					System.out.println(txtFechaEntrada.getDate());
+					System.out.println(txtFechaSalida.getDate());
+					guardarReserva();
 					RegistroHuesped registro = new RegistroHuesped();
 					registro.setVisible(true);
 				} else {
@@ -376,4 +374,13 @@ public class ReservasView extends JFrame {
 	        int y = evt.getYOnScreen();
 	        this.setLocation(x - xMouse, y - yMouse);
 }
+	    
+	    //Metodo para guardar reserva
+	    private void guardarReserva(){
+	    	String fechaIn=((JTextField)txtFechaEntrada.getDateEditor().getUiComponent()).getText();
+	    	String fechaOut=((JTextField)txtFechaSalida.getDateEditor().getUiComponent()).getText();
+	    	String FormaPago=(String) (txtFormaPago.getSelectedItem());
+	    	Reserva nuevaReserva = new Reserva(java.sql.Date.valueOf(fechaIn),java.sql.Date.valueOf(fechaIn),valorReserva,FormaPago);
+	    	reservaController.guardarReserva(nuevaReserva);
+	    }
 }
