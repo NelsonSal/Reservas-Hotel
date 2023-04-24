@@ -380,7 +380,7 @@ public class ReservasView extends JFrame {
 	    	String fechaIn=((JTextField)txtFechaEntrada.getDateEditor().getUiComponent()).getText();
 	    	String fechaOut=((JTextField)txtFechaSalida.getDateEditor().getUiComponent()).getText();
 	    	String FormaPago=(String) (txtFormaPago.getSelectedItem());
-	    	Reserva nuevaReserva = new Reserva(java.sql.Date.valueOf(fechaIn),java.sql.Date.valueOf(fechaIn),valorReserva,FormaPago);
+	    	Reserva nuevaReserva = new Reserva(java.sql.Date.valueOf(fechaIn),java.sql.Date.valueOf(fechaOut),valorReserva,FormaPago);
 	    	reservaController.guardarReserva(nuevaReserva);
 	    }
 }
