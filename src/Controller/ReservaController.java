@@ -20,10 +20,11 @@ public class ReservaController {
 		return reserva.valorReserva(fechaIn, fechaOut);  
 	}
 
-	public void guardarReserva(Reserva nuevaReserva) {
+	public int guardarReserva(Reserva nuevaReserva) {
 		// TODO Auto-generated method stub
 		System.out.println("llego a guardarReserva en Controller---> crear DAO");
-		reservaDao.guardar(nuevaReserva);
+		return reservaDao.guardar(nuevaReserva);
+		
 		
 	}
 

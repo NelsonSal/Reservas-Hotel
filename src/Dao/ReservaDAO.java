@@ -17,7 +17,7 @@ public class ReservaDAO {
 		this.con = con;
 	}
 
-	public void guardar(Reserva reserva) {
+	public int guardar(Reserva reserva) {
 
 		try (con) {
 			// con.setAutoCommit(false); //Tomamos el control manual del commit
@@ -36,8 +36,10 @@ public class ReservaDAO {
 //con.rollback();//Se reversa la transacción si error.
 			throw new RuntimeException(e);
 		}
+		return  reserva.getIdReserva();
+		
 	}
-	private void ejecutaRegistro(Reserva reserva, PreparedStatement statement)
+	private int ejecutaRegistro(Reserva reserva, PreparedStatement statement)
 			throws SQLException {
 		
 		statement.setDate(1, reserva.getFechaIn());  
@@ -52,9 +54,10 @@ public class ReservaDAO {
 			while(resultSet.next()) {
 			//producto.setId(resultSet.getInt(1));
 			reserva.setIdReserva(resultSet.getInt(1));
-			System.out.println(String.format("Fue insertado el producto %s", reserva));
+			System.out.println(String.format("Fue insertado el producto %s", reserva.getIdReserva()));
 		}
 		}
+		return reserva.getIdReserva();
 	}
 
 }

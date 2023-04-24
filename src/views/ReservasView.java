@@ -340,7 +340,8 @@ public class ReservasView extends JFrame {
 					System.out.println(valorReserva);
 					System.out.println(txtFechaEntrada.getDate());
 					System.out.println(txtFechaSalida.getDate());
-					guardarReserva();
+					//guardarReserva();
+					System.out.println("En reservasView Se recibe ID: "+ guardarReserva());
 					RegistroHuesped registro = new RegistroHuesped();
 					registro.setVisible(true);
 				} else {
@@ -376,11 +377,12 @@ public class ReservasView extends JFrame {
 }
 	    
 	    //Metodo para guardar reserva
-	    private void guardarReserva(){
+	    private int guardarReserva(){
 	    	String fechaIn=((JTextField)txtFechaEntrada.getDateEditor().getUiComponent()).getText();
 	    	String fechaOut=((JTextField)txtFechaSalida.getDateEditor().getUiComponent()).getText();
 	    	String FormaPago=(String) (txtFormaPago.getSelectedItem());
 	    	Reserva nuevaReserva = new Reserva(java.sql.Date.valueOf(fechaIn),java.sql.Date.valueOf(fechaOut),valorReserva,FormaPago);
-	    	reservaController.guardarReserva(nuevaReserva);
+	    	//reservaController.guardarReserva(nuevaReserva);
+	    	return reservaController.guardarReserva(nuevaReserva);
 	    }
 }
