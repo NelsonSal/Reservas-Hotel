@@ -270,13 +270,6 @@ public class ReservasView extends JFrame {
 		txtFechaSalida.getCalendarButton().setBounds(267, 1, 21, 31);
 		txtFechaSalida.setBackground(Color.WHITE);
 		txtFechaSalida.setFont(new Font("Roboto", Font.PLAIN, 18));
-//		txtFechaSalida.addPropertyChangeListener(new PropertyChangeListener() {
-//			public void propertyChange(PropertyChangeEvent evt) {
-//				System.out.println("Fecha-in: "+ ReservasView.txtFechaEntrada.getDate());// ACAAAAAAAAAAAAAAAAA/&&%$#%$#"#
-//				System.out.println("Fecha-out: "+ ReservasView.txtFechaSalida.getDate());// ACAAAAAAAAAAAAAAAAA/&&%$#%$#"#
-//				//Activa el evento, después del usuario seleccionar las fechas se debe calcular el valor de la reserva
-//			}
-//		});
 		txtFechaSalida.setDateFormatString("yyyy-MM-dd");
 		txtFechaSalida.getCalendarButton().setBackground(SystemColor.textHighlight);
 		txtFechaSalida.setBorder(new LineBorder(new Color(255, 255, 255), 0));
@@ -285,6 +278,7 @@ public class ReservasView extends JFrame {
 			
 
 			public void propertyChange(PropertyChangeEvent evt) {
+				//Activa el evento, después del usuario seleccionar las fechas se debe calcular el valor de la reserva
 				Date dateIn = ReservasView.txtFechaEntrada.getDate();
 				Date dateOut = ReservasView.txtFechaSalida.getDate();
 				System.out.println("Fecha-in: "+ dateIn  );// ACAAAAAAAAAAAAAAAAA/&&%$#%$#"#
@@ -301,12 +295,12 @@ public class ReservasView extends JFrame {
 						
 					}else {
 						
-						//mande el mensaje
+						//manda el mensaje si las fechas estan mal seleccionadas
 						JOptionPane.showMessageDialog(null, "La Fecha de Salida debe ser posterior  a la de entrada");
 					}
 				}
 				
-				//Activa el evento, después del usuario seleccionar las fechas se debe calcular el valor de la reserva
+				
 			}
 		});
 		
@@ -334,16 +328,13 @@ public class ReservasView extends JFrame {
 		btnsiguiente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//System.out.println("Fecha-in: "+ ReservasView.txtFechaEntrada.getDate());// ACAAAAAAAAAAAAAAAAA/&&%$#%$#"#
 				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
 					System.out.println(txtFormaPago.getSelectedItem());
 					System.out.println(valorReserva);
 					System.out.println(txtFechaEntrada.getDate());
 					System.out.println(txtFechaSalida.getDate());
-					//guardarReserva();
-					System.out.println("En reservasView Se recibe ID: "+ guardarReserva());
-					RegistroHuesped registro = new RegistroHuesped();
-					registro.setVisible(true);
+					guardarReserva();
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
 				}
@@ -377,12 +368,15 @@ public class ReservasView extends JFrame {
 }
 	    
 	    //Metodo para guardar reserva
-	    private int guardarReserva(){
+	    private void guardarReserva(){
 	    	String fechaIn=((JTextField)txtFechaEntrada.getDateEditor().getUiComponent()).getText();
 	    	String fechaOut=((JTextField)txtFechaSalida.getDateEditor().getUiComponent()).getText();
 	    	String FormaPago=(String) (txtFormaPago.getSelectedItem());
 	    	Reserva nuevaReserva = new Reserva(java.sql.Date.valueOf(fechaIn),java.sql.Date.valueOf(fechaOut),valorReserva,FormaPago);
-	    	//reservaController.guardarReserva(nuevaReserva);
-	    	return reservaController.guardarReserva(nuevaReserva);
+	    	reservaController.guardarReserva(nuevaReserva);
+	    	System.out.println("aca"+nuevaReserva.getIdReserva());
+	    	RegistroHuesped registro = new RegistroHuesped(nuevaReserva.getIdReserva());
+			registro.setVisible(true);
+			dispose();
 	    }
 }

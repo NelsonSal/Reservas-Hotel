@@ -6,10 +6,8 @@ public class Reserva {
 	private int idReserva;
 	private Date fechaIn;
 	private Date fechaOut;
-	//private double valor;
 	private String valorReserva;
 	private String formaDePago;
-	//private double dias;
 	private double tarifa=500;
 	
 	

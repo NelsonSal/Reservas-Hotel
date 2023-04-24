@@ -58,7 +58,7 @@ public class RegistroHuesped extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistroHuesped() {
+	public RegistroHuesped(int idReserva) {
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroHuesped.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -210,6 +210,8 @@ public class RegistroHuesped extends JFrame {
 		txtNreserva.setColumns(10);
 		txtNreserva.setBackground(Color.WHITE);
 		txtNreserva.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		String id=String.valueOf(idReserva);
+		txtNreserva.setText(id);
 		contentPane.add(txtNreserva);
 		
 		JSeparator separator_1_2 = new JSeparator();
@@ -316,6 +318,10 @@ public class RegistroHuesped extends JFrame {
 	}
 	
 	
+	public RegistroHuesped() {
+		// TODO Auto-generated constructor stub Generico
+	}
+
 	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
 	        xMouse = evt.getX();

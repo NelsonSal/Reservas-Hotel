@@ -17,7 +17,7 @@ public class ReservaDAO {
 		this.con = con;
 	}
 
-	public int guardar(Reserva reserva) {
+	public void guardar(Reserva nuevaReserva) {
 
 		try (con) {
 			// con.setAutoCommit(false); //Tomamos el control manual del commit
@@ -28,7 +28,7 @@ public class ReservaDAO {
 					"INSERT INTO reservas (FechaEntrada,FechaSalida,valor,FormaPago)" + "VALUES(?,?,?,?)",
 					Statement.RETURN_GENERATED_KEYS);
 			try (statement) {
-				ejecutaRegistro(reserva, statement);
+				ejecutaRegistro(nuevaReserva, statement);
 
 				// con.commit(); // Se ejecuta la transacción si mo hay error
 			}
@@ -36,16 +36,16 @@ public class ReservaDAO {
 //con.rollback();//Se reversa la transacción si error.
 			throw new RuntimeException(e);
 		}
-		return  reserva.getIdReserva();
+		
 		
 	}
-	private int ejecutaRegistro(Reserva reserva, PreparedStatement statement)
+	private void ejecutaRegistro(Reserva nuevaReserva, PreparedStatement statement)
 			throws SQLException {
 		
-		statement.setDate(1, reserva.getFechaIn());  
-		statement.setDate(2, reserva.getFechaOut());
-		statement.setString(3, reserva.getValorReserva());
-		statement.setString(4, reserva.getFormaDePago());
+		statement.setDate(1, nuevaReserva.getFechaIn());  
+		statement.setDate(2, nuevaReserva.getFechaOut());
+		statement.setString(3, nuevaReserva.getValorReserva());
+		statement.setString(4, nuevaReserva.getFormaDePago());
 		
 		statement.execute();
 		
@@ -53,12 +53,11 @@ public class ReservaDAO {
 		try(resultSet){
 			while(resultSet.next()) {
 			//producto.setId(resultSet.getInt(1));
-			reserva.setIdReserva(resultSet.getInt(1));
-			System.out.println(String.format("Fue insertado el producto %s", reserva.getIdReserva()));
+				nuevaReserva.setIdReserva(resultSet.getInt(1));
+			System.out.println(String.format("Fue insertado el producto %s", nuevaReserva.getIdReserva()));
 		}
 		}
-		return reserva.getIdReserva();
+		
 	}
 
 }
-//System.out.println("llego a guardar en DAO---> crear metodo enviar  a DB");
