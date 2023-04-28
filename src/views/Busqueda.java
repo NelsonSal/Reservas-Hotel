@@ -6,6 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import Controller.HuespedController;
+import Controller.ReservaController;
+import modelo.Reserva;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -38,6 +43,9 @@ public class Busqueda extends JFrame {
 	private JLabel labelAtras;
 	private JLabel labelExit;
 	int xMouse, yMouse;
+	
+	private ReservaController reservaController;
+	private HuespedController huespedController;
 
 	/**
 	 * Launch the application.
@@ -69,6 +77,9 @@ public class Busqueda extends JFrame {
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
+		
+		this.reservaController = new ReservaController();
+		this.huespedController= new HuespedController();
 		
 		txtBuscar = new JTextField();
 		txtBuscar.setBounds(536, 127, 193, 31);
@@ -105,6 +116,8 @@ public class Busqueda extends JFrame {
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
 		
+		cargarTablaReservas();
+		
 		
 		tbHuespedes = new JTable();
 		tbHuespedes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -120,6 +133,8 @@ public class Busqueda extends JFrame {
 		JScrollPane scroll_tableHuespedes = new JScrollPane(tbHuespedes);
 		panel.addTab("Huéspedes", new ImageIcon(Busqueda.class.getResource("/imagenes/pessoas.png")), scroll_tableHuespedes, null);
 		scroll_tableHuespedes.setVisible(true);
+		
+		cargarTablaHuespedes();
 		
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/Ha-100px.png")));
@@ -273,4 +288,32 @@ public class Busqueda extends JFrame {
 	        int y = evt.getYOnScreen();
 	        this.setLocation(x - xMouse, y - yMouse);
 }
+	    private void cargarTablaReservas() {
+	    	
+    		var reservas = this.reservaController.listar();
+    		reservas.forEach(reserva -> modelo.addRow(
+    				new Object[] {reserva.getIdReserva(),
+    						reserva.getFechaIn(),
+    						reserva.getFechaOut(),
+    						reserva.getValorReserva(),
+    						reserva.getFormaDePago()
+    						}));
+       	
+	    }
+	    private void cargarTablaHuespedes() {
+	    	
+    		var huespedes = this.huespedController.listar();
+    		
+    		huespedes.forEach(huesped -> modeloHuesped.addRow(
+    				new Object[] {huesped.getIdHuesped(),
+    						huesped.getNombre(),
+    						huesped.getApellido(),
+    						huesped.getFechaNacimiento(),
+    						huesped.getNacionalidad(),
+    						huesped.getTelefono(),
+    						huesped.getIdReserva()
+    						}));
+       	
+	    }
+	    
 }

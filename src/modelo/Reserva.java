@@ -24,6 +24,16 @@ public class Reserva {
 	}
 	
 	
+	
+	
+
+public Reserva(int idReserva, Date fechaIn, Date fechaOut, String valorReserva, String formaDePago) {
+		this.idReserva = idReserva;
+		this.fechaIn = fechaIn;
+		this.fechaOut = fechaOut;
+		this.valorReserva = valorReserva;
+		this.formaDePago = formaDePago;
+	}
 
 //	public double cantDias (long fechaIn, long fechaOut) {
 //		long diferencia = fechaOut - fechaIn;

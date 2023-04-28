@@ -286,6 +286,10 @@ public class RegistroHuesped extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 
 				guardarHuesped();
+				MenuUsuario usuario = new MenuUsuario();
+				usuario.setVisible(true);
+				dispose();
+				
 			}
 		});
 		btnguardar.setLayout(null);
@@ -364,6 +368,8 @@ public class RegistroHuesped extends JFrame {
 				java.sql.Date.valueOf(fechaNacimiento), nacionalidad, txtTelefono.getText(),
 				idReserva2);
 		huespedController.guardarHuesped(huesped);
+		JOptionPane.showMessageDialog(this, "Se ha guardado el Huesped Exitosamente ");
+		;
 	}
 
 	// Código que permite mover la ventana por la pantalla según la posición de "x"

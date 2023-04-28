@@ -2,12 +2,14 @@ package Controller;
 
 
 
+import java.util.List;
+
 import Dao.HuespedDAO;
 import conexion.ConnectionFactory;
 import modelo.Huesped;
 
 public class HuespedController {
-	private Huesped huesped;
+	//private Huesped huesped;
 	private HuespedDAO huespedDao;
 	
 	//Huesped huesped = new Huesped();
@@ -17,12 +19,13 @@ public class HuespedController {
 	
 	
 	public void guardarHuesped(Huesped huesped) {
-		System.out.println("name: "+huesped.getNombre());
-		// TODO Auto-generated method stub
-		System.out.println("llego a guardarHuesped en Controller---> crear DAO");
 		huespedDao.guardar(huesped);
+	}
+
+
+	public List<Huesped> listar() {
 		
-		
+		return huespedDao.listar();
 	}
 
 }

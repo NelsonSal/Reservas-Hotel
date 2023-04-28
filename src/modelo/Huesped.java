@@ -23,6 +23,25 @@ public class Huesped {
 		this.telefono = telefono;
 		this.idReserva = idReserva;
 	}
+	
+	
+
+	public Huesped(int idHuesped, String nombre, String apellido, Date fechaNacimiento, String nacionalidad,
+			String telefono, int idReserva) {
+		this.idHuesped = idHuesped;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.fechaNacimiento = fechaNacimiento;
+		this.nacionalidad = nacionalidad;
+		this.telefono = telefono;
+		this.idReserva = idReserva;
+	}
+	
+	
+
+	public int getIdHuesped() {
+		return idHuesped;
+	}
 
 	public String getNombre() {
 		return nombre;

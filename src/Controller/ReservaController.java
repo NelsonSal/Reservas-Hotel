@@ -2,6 +2,10 @@ package Controller;
 
 
 
+import java.util.List;
+
+
+
 import Dao.ReservaDAO;
 import conexion.ConnectionFactory;
 import modelo.Reserva;
@@ -21,10 +25,12 @@ public class ReservaController {
 	}
 
 	public void guardarReserva(Reserva nuevaReserva) {
-		// TODO Auto-generated method stub
-		System.out.println("llego a guardarReserva en Controller---> crear DAO");
 		reservaDao.guardar(nuevaReserva);
 		
+		
+	}
+	public List<Reserva> listar() {
+		return reservaDao.listar();
 		
 	}
 

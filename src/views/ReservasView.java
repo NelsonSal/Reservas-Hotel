@@ -281,11 +281,11 @@ public class ReservasView extends JFrame {
 				//Activa el evento, después del usuario seleccionar las fechas se debe calcular el valor de la reserva
 				Date dateIn = ReservasView.txtFechaEntrada.getDate();
 				Date dateOut = ReservasView.txtFechaSalida.getDate();
-				System.out.println("Fecha-in: "+ dateIn  );// ACAAAAAAAAAAAAAAAAA/&&%$#%$#"#
-				System.out.println("Fecha-out: "+ dateOut);// ACAAAAAAAAAAAAAAAAA/&&%$#%$#"#
+				//System.out.println("Fecha-in: "+ dateIn  );
+				//System.out.println("Fecha-out: "+ dateOut);
 				if (dateIn != null && dateOut != null ) {
 					boolean isAfter = dateOut.after(dateIn);
-					System.out.println(isAfter );
+					//System.out.println(isAfter );
 					if (isAfter) {
 						//Realiza calculo de dias y valor de reserva
 						long fechaInicialMs = dateIn.getTime();
@@ -329,10 +329,10 @@ public class ReservasView extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
-					System.out.println(txtFormaPago.getSelectedItem());
-					System.out.println(valorReserva);
-					System.out.println(txtFechaEntrada.getDate());
-					System.out.println(txtFechaSalida.getDate());
+					//System.out.println(txtFormaPago.getSelectedItem());
+					//System.out.println(valorReserva);
+					//System.out.println(txtFechaEntrada.getDate());
+					//System.out.println(txtFechaSalida.getDate());
 					guardarReserva();
 					
 				} else {
@@ -374,7 +374,8 @@ public class ReservasView extends JFrame {
 	    	String FormaPago=(String) (txtFormaPago.getSelectedItem());
 	    	Reserva nuevaReserva = new Reserva(java.sql.Date.valueOf(fechaIn),java.sql.Date.valueOf(fechaOut),valorReserva,FormaPago);
 	    	reservaController.guardarReserva(nuevaReserva);
-	    	System.out.println("aca"+nuevaReserva.getIdReserva());
+	    	JOptionPane.showMessageDialog(this, "Se ha guardado la Reserva " + nuevaReserva.getIdReserva() );
+	    	//System.out.println("aca"+nuevaReserva.getIdReserva());
 	    	RegistroHuesped registro = new RegistroHuesped(nuevaReserva.getIdReserva());
 			registro.setVisible(true);
 			dispose();
