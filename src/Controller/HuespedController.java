@@ -33,5 +33,5 @@ public class HuespedController {
 	
 	public List<Huesped> buscarHuespedPorReserva(Integer idReserva){
 		return huespedDao.buscarPorIdReserva(idReserva);
-
+	}
 }

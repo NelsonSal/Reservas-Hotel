@@ -235,8 +235,8 @@ public class Busqueda extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				limpiarTabla();
-				cargarTablaBuscaHuespedes();
-				//cargarTablaHuespedes();
+				//cargarTablaBuscaHuespedes();
+				cargarHuespedPorReserva();
 
 			}
 		});
@@ -323,7 +323,6 @@ public class Busqueda extends JFrame {
 	    private void cargarTablaHuespedes() {
 	    	
     		var huespedes = this.huespedController.listar();
-    		
     		llenarTablaHuespedes(huespedes);
        	
 	    }
@@ -343,18 +342,21 @@ public class Busqueda extends JFrame {
     		
        	
 	    }
+	    private void cargarHuespedPorReserva() {
+	    	
+    		var huespedes = this.huespedController.buscarHuespedPorReserva(Integer.parseInt(txtBuscar.getText()));
+    		//var huespedes = this.huespedController.buscar("sal");
+    		llenarTablaHuespedes(huespedes);
+    		
+    		//cargarTablaBuscaReserva(huesped.getIdReserva());
+    		
+    		huespedes.forEach(huesped -> cargarTablaBuscaReserva(huesped.getIdReserva()));
+    		
+       	
+	    }
+	    
 
-		private void llenarTablaHuespedes(List<Huesped> huespedes) {
-			huespedes.forEach(huesped -> modeloHuesped.addRow(
-    				new Object[] {huesped.getIdHuesped(),
-    						huesped.getNombre(),
-    						huesped.getApellido(),
-    						huesped.getFechaNacimiento(),
-    						huesped.getNacionalidad(),
-    						huesped.getTelefono(),
-    						huesped.getIdReserva()
-    						}));
-		}
+
 	    
 	    private void cargarTablaBuscaReserva(Integer id) {
 	    	var reservas = this.reservaController.buscarReserva(id);
@@ -368,6 +370,17 @@ public class Busqueda extends JFrame {
     						reserva.getFechaOut(),
     						reserva.getValorReserva(),
     						reserva.getFormaDePago()
+    						}));
+		}
+		private void llenarTablaHuespedes(List<Huesped> huespedes) {
+			huespedes.forEach(huesped -> modeloHuesped.addRow(
+    				new Object[] {huesped.getIdHuesped(),
+    						huesped.getNombre(),
+    						huesped.getApellido(),
+    						huesped.getFechaNacimiento(),
+    						huesped.getNacionalidad(),
+    						huesped.getTelefono(),
+    						huesped.getIdReserva()
     						}));
 		}
 }

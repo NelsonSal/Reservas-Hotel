@@ -138,8 +138,43 @@ public class HuespedDAO {
 	}
 
 	public List<Huesped> buscarPorIdReserva(Integer idReserva) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Huesped> resultado = new ArrayList<>();
+		ConnectionFactory factory = new ConnectionFactory();
+		final Connection con =factory.recuperaConexion(); 
+		
+		try(con){
+			var querySelector = "SELECT Id_Huesped,Nombre,Apellido,"
+					+ " FechaNacimiento,Nacionalidad,Telefono,"
+					+ " Id_Reserva FROM huespedes"
+					+ " WHERE Id_Reserva=?";
+			System.out.println(querySelector);
+			final PreparedStatement statement = con.prepareStatement(querySelector);
+			
+			
+			try(statement){
+				statement.setInt(1, idReserva);
+				statement.execute();
+			
+				final ResultSet resultSet=statement.getResultSet();
+				try(resultSet){
+						while (resultSet.next()) {
+						Huesped fila = new Huesped(resultSet.getInt("Id_Huesped"),
+								resultSet.getString("Nombre"),
+								resultSet.getString("Apellido"),
+								resultSet.getDate("FechaNacimiento"),
+								resultSet.getString("Nacionalidad"),
+								resultSet.getString("Telefono"),
+								resultSet.getInt("Id_Reserva"));
+						
+						resultado.add(fila);
+						
+					}
+				} 
+			}
+			return resultado;	
+		}catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
