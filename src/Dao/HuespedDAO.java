@@ -10,6 +10,7 @@ import java.util.List;
 
 import modelo.Huesped;
 import modelo.Reserva;
+import conexion.*;
 
 public class HuespedDAO {
 	final private Connection con;
@@ -65,8 +66,8 @@ public class HuespedDAO {
 	
 	public List<Huesped> listar() {
 		List<Huesped> resultado = new ArrayList<>();
-		// ConnectionFactory factory = new ConnectionFactory();
-		// final Connection con =factory.recuperaConexion();
+		ConnectionFactory factory = new ConnectionFactory();
+		 final Connection con =factory.recuperaConexion();
 		try (con) {
 			final PreparedStatement statement = con
 					.prepareStatement("SELECT Id_Huesped,Nombre,Apellido,FechaNacimiento,Nacionalidad,Telefono, Id_Reserva FROM huespedes");
@@ -94,6 +95,51 @@ public class HuespedDAO {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public List<Huesped> buscar(String apellido) {
+		List<Huesped> resultado = new ArrayList<>();
+		ConnectionFactory factory = new ConnectionFactory();
+		final Connection con =factory.recuperaConexion(); 
+		
+		try(con){
+			var querySelector = "SELECT Id_Huesped,Nombre,Apellido,"
+					+ " FechaNacimiento,Nacionalidad,Telefono,"
+					+ " Id_Reserva FROM huespedes"
+					+ " WHERE apellido=?";
+			System.out.println(querySelector);
+			final PreparedStatement statement = con.prepareStatement(querySelector);
+			
+			
+			try(statement){
+				statement.setString(1, apellido);
+				statement.execute();
+			
+				final ResultSet resultSet=statement.getResultSet();
+				try(resultSet){
+						while (resultSet.next()) {
+						Huesped fila = new Huesped(resultSet.getInt("Id_Huesped"),
+								resultSet.getString("Nombre"),
+								resultSet.getString("Apellido"),
+								resultSet.getDate("FechaNacimiento"),
+								resultSet.getString("Nacionalidad"),
+								resultSet.getString("Telefono"),
+								resultSet.getInt("Id_Reserva"));
+						
+						resultado.add(fila);
+						
+					}
+				} 
+			}
+			return resultado;	
+		}catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public List<Huesped> buscarPorIdReserva(Integer idReserva) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

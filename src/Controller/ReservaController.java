@@ -33,5 +33,8 @@ public class ReservaController {
 		return reservaDao.listar();
 		
 	}
+	public List<Reserva> buscarReserva(Integer Id_Reserva){
+		return reservaDao.buscarReserva(Id_Reserva);
+	}
 
 }

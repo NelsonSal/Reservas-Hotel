@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Controller.HuespedController;
 import Controller.ReservaController;
+import modelo.Huesped;
 import modelo.Reserva;
 
 import javax.swing.JTable;
@@ -134,6 +135,7 @@ public class Busqueda extends JFrame {
 		panel.addTab("Huéspedes", new ImageIcon(Busqueda.class.getResource("/imagenes/pessoas.png")), scroll_tableHuespedes, null);
 		scroll_tableHuespedes.setVisible(true);
 		
+		
 		cargarTablaHuespedes();
 		
 		JLabel lblNewLabel_2 = new JLabel("");
@@ -152,6 +154,7 @@ public class Busqueda extends JFrame {
 		header.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
 				headerMousePressed(e);
 			}
 		});
@@ -231,9 +234,22 @@ public class Busqueda extends JFrame {
 		btnbuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				limpiarTabla();
+				cargarTablaBuscaHuespedes();
+				//cargarTablaHuespedes();
 
 			}
 		});
+		
+//		btnbuscar.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                eliminar();
+//                limpiarTabla();
+//                cargarTabla();
+//            }
+//        });
+		
+		
 		btnbuscar.setLayout(null);
 		btnbuscar.setBackground(new Color(12, 138, 199));
 		btnbuscar.setBounds(748, 125, 122, 35);
@@ -274,6 +290,16 @@ public class Busqueda extends JFrame {
 		lblEliminar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		lblEliminar.setBounds(0, 0, 122, 35);
 		btnEliminar.add(lblEliminar);
+		
+		JButton btnNewButton = new JButton("Prueba");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpiarTabla();
+				cargarTablaBuscaHuespedes();
+			}
+		});
+		btnNewButton.setBounds(748, 77, 89, 23);
+		contentPane.add(btnNewButton);
 		setResizable(false);
 	}
 	
@@ -291,20 +317,35 @@ public class Busqueda extends JFrame {
 	    private void cargarTablaReservas() {
 	    	
     		var reservas = this.reservaController.listar();
-    		reservas.forEach(reserva -> modelo.addRow(
-    				new Object[] {reserva.getIdReserva(),
-    						reserva.getFechaIn(),
-    						reserva.getFechaOut(),
-    						reserva.getValorReserva(),
-    						reserva.getFormaDePago()
-    						}));
+    		llenarTablaReservas(reservas);
        	
 	    }
 	    private void cargarTablaHuespedes() {
 	    	
     		var huespedes = this.huespedController.listar();
     		
-    		huespedes.forEach(huesped -> modeloHuesped.addRow(
+    		llenarTablaHuespedes(huespedes);
+       	
+	    }
+	    private void limpiarTabla() {
+	        modelo.getDataVector().clear();
+	        modeloHuesped.getDataVector().clear();
+	    }
+	    private void cargarTablaBuscaHuespedes() {
+	    	
+    		var huespedes = this.huespedController.buscarHuesped(txtBuscar.getText());
+    		//var huespedes = this.huespedController.buscar("sal");
+    		llenarTablaHuespedes(huespedes);
+    		
+    		//cargarTablaBuscaReserva(huesped.getIdReserva());
+    		
+    		huespedes.forEach(huesped -> cargarTablaBuscaReserva(huesped.getIdReserva()));
+    		
+       	
+	    }
+
+		private void llenarTablaHuespedes(List<Huesped> huespedes) {
+			huespedes.forEach(huesped -> modeloHuesped.addRow(
     				new Object[] {huesped.getIdHuesped(),
     						huesped.getNombre(),
     						huesped.getApellido(),
@@ -313,7 +354,20 @@ public class Busqueda extends JFrame {
     						huesped.getTelefono(),
     						huesped.getIdReserva()
     						}));
-       	
-	    }
+		}
 	    
+	    private void cargarTablaBuscaReserva(Integer id) {
+	    	var reservas = this.reservaController.buscarReserva(id);
+	    	llenarTablaReservas(reservas);
+	    }
+
+		private void llenarTablaReservas(List<Reserva> reservas) {
+			reservas.forEach(reserva -> modelo.addRow(
+    				new Object[] {reserva.getIdReserva(),
+    						reserva.getFechaIn(),
+    						reserva.getFechaOut(),
+    						reserva.getValorReserva(),
+    						reserva.getFormaDePago()
+    						}));
+		}
 }

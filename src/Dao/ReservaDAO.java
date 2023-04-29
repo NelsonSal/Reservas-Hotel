@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import conexion.ConnectionFactory;
+import modelo.Huesped;
 import modelo.Reserva;
 
 public class ReservaDAO {
@@ -78,6 +80,42 @@ public class ReservaDAO {
 			}
 			return resultado;
 		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public List<Reserva> buscarReserva(Integer Id_Reserva) {
+		List<Reserva> resultado = new ArrayList<>();
+		ConnectionFactory factory = new ConnectionFactory();
+		final Connection con =factory.recuperaConexion(); 
+		
+		try(con){
+			var querySelector = "SELECT Id_Reserva,FechaEntrada,FechaSalida,Valor,FormaPago FROM reservas "
+					+ "WHERE Id_Reserva=?";
+			System.out.println(querySelector);
+			final PreparedStatement statement = con.prepareStatement(querySelector);
+			
+			
+			try(statement){
+				statement.setInt(1, Id_Reserva);
+				statement.execute();
+			
+				final ResultSet resultSet=statement.getResultSet();
+				try(resultSet){
+						while (resultSet.next()) {
+						Reserva fila = new Reserva(resultSet.getInt("Id_Reserva"),
+								resultSet.getDate("FechaEntrada"),
+								resultSet.getDate("FechaSalida"),
+								resultSet.getString("Valor"),
+								resultSet.getString("FormaPago"));
+						
+						resultado.add(fila);
+						
+					}
+				} 
+			}
+			return resultado;	
+		}catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}

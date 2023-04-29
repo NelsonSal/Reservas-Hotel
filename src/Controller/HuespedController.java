@@ -24,8 +24,14 @@ public class HuespedController {
 
 
 	public List<Huesped> listar() {
-		
 		return huespedDao.listar();
 	}
+	
+	public List<Huesped> buscarHuesped(String apellido){
+		return huespedDao.buscar(apellido);
+	}
+	
+	public List<Huesped> buscarHuespedPorReserva(Integer idReserva){
+		return huespedDao.buscarPorIdReserva(idReserva);
 
 }
