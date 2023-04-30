@@ -2,6 +2,7 @@ package Controller;
 
 
 
+import java.sql.Date;
 import java.util.List;
 
 
@@ -35,6 +36,11 @@ public class ReservaController {
 	}
 	public List<Reserva> buscarReserva(Integer Id_Reserva){
 		return reservaDao.buscarReserva(Id_Reserva);
+	}
+
+	public int modificar(Integer Id_Reserva, Date fechaIn, Date fechaOut, String valor, String formaDePago) {
+		// TODO Auto-generated method stub
+		return reservaDao.modificarReserva(Id_Reserva,fechaIn,fechaOut,valor,formaDePago);
 	}
 
 }

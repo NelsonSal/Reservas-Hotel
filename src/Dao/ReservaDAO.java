@@ -1,6 +1,7 @@
 package Dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -58,8 +59,8 @@ public class ReservaDAO {
 
 	public List<Reserva> listar() {
 		List<Reserva> resultado = new ArrayList<>();
-		// ConnectionFactory factory = new ConnectionFactory();
-		// final Connection con =factory.recuperaConexion();
+		 ConnectionFactory factory = new ConnectionFactory();
+		 final Connection con =factory.recuperaConexion();
 		try (con) {
 			final PreparedStatement statement = con
 					.prepareStatement("SELECT Id_Reserva,FechaEntrada,FechaSalida,Valor,FormaPago FROM reservas");
@@ -120,4 +121,32 @@ public class ReservaDAO {
 		}
 	}
 
+	public int modificarReserva(Integer id_Reserva, Date fechaIn, Date fechaOut, String valor, String formaDePago) {
+		final Connection con= new ConnectionFactory().recuperaConexion();
+		try(con){
+			final PreparedStatement statement = con.prepareStatement("UPDATE reservas SET "
+		            + " FechaEntrada = ?"
+		            + ", FechaSalida = ?"
+		            + ", valor = ?"
+		            + ", formaPago = ?"
+		            + " WHERE Id_Reserva = ?");
+			try(statement){
+				statement.setDate(1, fechaIn);
+				statement.setDate(2, fechaOut);
+				statement.setString(3, valor);
+				statement.setString(4, formaDePago);
+				statement.setInt(5, id_Reserva);
+				statement.execute();
+				int updateCount = statement.getUpdateCount();
+				
+				return updateCount;
+			}
+		
+		}catch (SQLException e) {
+		throw new RuntimeException(e);
+	
+		}
+	}
+
+	
 }

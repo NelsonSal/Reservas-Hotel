@@ -2,6 +2,7 @@ package Controller;
 
 
 
+import java.sql.Date;
 import java.util.List;
 
 import Dao.HuespedDAO;
@@ -33,5 +34,11 @@ public class HuespedController {
 	
 	public List<Huesped> buscarHuespedPorReserva(Integer idReserva){
 		return huespedDao.buscarPorIdReserva(idReserva);
+	}
+
+
+	public int modificar(Integer id, String nombre, String apellido, Date fechaNacimiento, String nacionalidad,
+			String telefono) {
+		return huespedDao.modificar(id,nombre,apellido,fechaNacimiento,nacionalidad,telefono);
 	}
 }

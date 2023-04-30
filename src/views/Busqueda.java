@@ -19,9 +19,12 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Optional;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import java.awt.Toolkit;
@@ -116,7 +119,7 @@ public class Busqueda extends JFrame {
 		JScrollPane scroll_table = new JScrollPane(tbReservas);
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
-		
+		System.out.println("aca toy");
 		cargarTablaReservas();
 		
 		
@@ -264,6 +267,20 @@ public class Busqueda extends JFrame {
 		lblBuscar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		
 		JPanel btnEditar = new JPanel();
+		btnEditar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				modificar();
+				//limpiarTabla();
+				//cargarHuespedPorReserva();
+				modificar2();
+				limpiarTabla();
+				cargarHuespedPorReserva();
+				
+				//cargarTablaReservas();
+				//cargarTablaHuespedes();
+			}
+		});
 		btnEditar.setLayout(null);
 		btnEditar.setBackground(new Color(12, 138, 199));
 		btnEditar.setBounds(635, 508, 122, 35);
@@ -290,16 +307,6 @@ public class Busqueda extends JFrame {
 		lblEliminar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		lblEliminar.setBounds(0, 0, 122, 35);
 		btnEliminar.add(lblEliminar);
-		
-		JButton btnNewButton = new JButton("Prueba");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				limpiarTabla();
-				cargarTablaBuscaHuespedes();
-			}
-		});
-		btnNewButton.setBounds(748, 77, 89, 23);
-		contentPane.add(btnNewButton);
 		setResizable(false);
 	}
 	
@@ -383,4 +390,79 @@ public class Busqueda extends JFrame {
     						huesped.getIdReserva()
     						}));
 		}
+		private boolean tieneFilaElegidaReservas() {
+			
+	        boolean elijeReserva = tbReservas.getSelectedRowCount() == 0 || tbReservas.getSelectedColumnCount() == 0;
+	        System.out.println("elije reserva " + elijeReserva);
+			return elijeReserva ;
+	    }
+		private boolean tieneFilaElegidaHuespedes() {
+			
+	        boolean elijeHuesped = tbHuespedes.getSelectedRowCount() == 0 || tbHuespedes.getSelectedColumnCount() == 0;
+	        System.out.println("elijehuesped= "+elijeHuesped);
+			return elijeHuesped ;
+	    }
+		
+
+	    private void modificar() {
+	        if (tieneFilaElegidaReservas()) {
+	            JOptionPane.showMessageDialog(this, "Por favor, elije un item Reserva");
+	        	
+	            return;
+	        }
+	        
+	        Optional.ofNullable(modelo.getValueAt(tbReservas.getSelectedRow(), tbReservas.getSelectedColumn()))
+	                .ifPresentOrElse(fila -> {
+	                	//System.out.println("fila elejida: "+ tabla.getSelectedRowCount()+" y columna elejida: "+tabla.getSelectedColumn());
+	                    //Integer id = (Integer) modelo.getValueAt(tabla.getSelectedRow(), 0);
+	                    Integer id = Integer.valueOf( modelo.getValueAt(tbReservas.getSelectedRow(), 0).toString());//mia
+	                    String fechaIn = String.valueOf( modelo.getValueAt(tbReservas.getSelectedRow(), 1));
+	                    String fechaOut = String.valueOf( modelo.getValueAt(tbReservas.getSelectedRow(), 2));
+	                    String valor = (String) modelo.getValueAt(tbReservas.getSelectedRow(), 3);
+	                    String formaDePago = (String) modelo.getValueAt(tbReservas.getSelectedRow(), 4);
+	                    //Integer cantidad = (Integer) modelo.getValueAt(tabla.getSelectedRow(), 3);//mia
+	                    //Integer cantidad = Integer.valueOf( modelo.getValueAt(tbReservas.getSelectedRow(), 3).toString());//mia
+	                    int updateCount;
+	                    
+	                    updateCount=this.reservaController.modificar(id,java.sql.Date.valueOf(fechaIn), java.sql.Date.valueOf(fechaOut), valor,formaDePago);
+	                    tbReservas.clearSelection();
+	        	        tbHuespedes.clearSelection();	
+						System.out.println(tbHuespedes.getSelectedRowCount() == 0 || tbHuespedes.getSelectedColumnCount() == 0);
+	                    JOptionPane.showMessageDialog(this, updateCount+" Item modificado con éxito!");
+	                    
+	                }, () -> JOptionPane.showMessageDialog(this, "Por favor, elije un item Reserva2"));
+	        
+	        
+	        		
+	    }
+	    private void modificar2() {
+			    if (tieneFilaElegidaHuespedes()) {
+		            JOptionPane.showMessageDialog(this, "Por favor, elije un item Huesped");
+		            return;
+		        }
+    	
+		    	Optional.ofNullable(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), tbHuespedes.getSelectedColumn()))
+		        .ifPresentOrElse(fila -> {
+		        	//System.out.println("fila elejida: "+ tabla.getSelectedRowCount()+" y columna elejida: "+tabla.getSelectedColumn());
+		            //Integer id = (Integer) modelo.getValueAt(tabla.getSelectedRow(), 0);
+		            Integer id = Integer.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 0).toString());//mia
+		            String nombre = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 1));
+		            String apellido = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 2));
+		            String fechaNacimiento = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 3));
+		            String nacionalidad = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 4));
+		            String telefono = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 5));
+		            //Integer cantidad = (Integer) modelo.getValueAt(tabla.getSelectedRow(), 3);//mia
+		            //Integer cantidad = Integer.valueOf( modelo.getValueAt(tbReservas.getSelectedRow(), 3).toString());//mia
+		            int updateCount;
+		            
+		            updateCount=this.huespedController.modificar(id,nombre,apellido,java.sql.Date.valueOf(fechaNacimiento),nacionalidad,telefono);
+						
+		            tbReservas.clearSelection();
+			        tbHuespedes.clearSelection();
+		            JOptionPane.showMessageDialog(this, updateCount+" Item modificado con éxito!");
+		        }, () -> JOptionPane.showMessageDialog(this, "Por favor, elije un item Huesped2"));
+		    	
+		    	tbReservas.clearSelection();
+		        tbHuespedes.clearSelection();
+	    	}
 }
