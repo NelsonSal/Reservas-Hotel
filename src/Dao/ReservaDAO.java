@@ -148,5 +148,22 @@ public class ReservaDAO {
 		}
 	}
 
+	public int eliminarReserva(Integer id_Reserva) {
+		final Connection con= new ConnectionFactory().recuperaConexion();
+		try(con){
+			final PreparedStatement statement = con.prepareStatement("DELETE FROM reservas  WHERE Id_Reserva =?");
+			try(statement){
+				statement.setInt(1, id_Reserva);
+				statement.execute();
+				int updateCount = statement.getUpdateCount(); 
+				System.out.println("Se elimino el producto con ID: "+ updateCount);
+				
+				return updateCount;
+			}
+		}catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	
 }

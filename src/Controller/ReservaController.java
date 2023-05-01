@@ -43,4 +43,9 @@ public class ReservaController {
 		return reservaDao.modificarReserva(Id_Reserva,fechaIn,fechaOut,valor,formaDePago);
 	}
 
+	public int eliminar(Integer Id_Reserva) {
+		
+		return reservaDao.eliminarReserva(Id_Reserva);
+	}
+
 }
