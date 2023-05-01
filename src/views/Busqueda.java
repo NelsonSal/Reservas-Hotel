@@ -120,7 +120,7 @@ public class Busqueda extends JFrame {
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
 		System.out.println("aca toy");
-		//cargarTablaReservas();
+		cargarTablaReservas();
 		
 		
 		tbHuespedes = new JTable();
@@ -139,7 +139,7 @@ public class Busqueda extends JFrame {
 		scroll_tableHuespedes.setVisible(true);
 		
 		
-		//cargarTablaHuespedes();
+		cargarTablaHuespedes();
 		
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/Ha-100px.png")));
@@ -240,8 +240,11 @@ public class Busqueda extends JFrame {
 				 
 				if (txtBuscar.getText().isBlank()) {
 					limpiarTabla();
-					cargarTablaReservas();
+					 tbReservas.clearSelection();
+	    		        tbHuespedes.clearSelection();
 					cargarTablaHuespedes();
+					cargarTablaReservas();
+					
 				}else {
 				try {
 					int id=Integer.parseInt(txtBuscar.getText());
@@ -290,7 +293,7 @@ public class Busqueda extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if (txtBuscar.getText().isBlank()) {
 					modificar();
-					modificar2();
+					//modificar2();
 					limpiarTabla();
 					cargarTablaReservas();
 					cargarTablaHuespedes();
@@ -298,7 +301,7 @@ public class Busqueda extends JFrame {
 				try {
 					int id=Integer.parseInt(txtBuscar.getText());
 					modificar();
-					modificar2();
+					//modificar2();
 					limpiarTabla();
 					cargarTablaBuscaReserva(id);
 					cargarHuespedPorReserva(id);
@@ -306,7 +309,7 @@ public class Busqueda extends JFrame {
 				}catch (NumberFormatException nfe){
 					//limpiarTabla();
 					modificar();
-					modificar2();
+					//modificar2();
 					//cargarTablaBuscaHuespedes();
 					
 				}
@@ -457,12 +460,11 @@ public class Busqueda extends JFrame {
 		
 
 	    private void modificar() {
-	        if (tieneFilaElegidaReservas()) {
-	            JOptionPane.showMessageDialog(this, "Por favor, elije un item Reserva");
-	        	
+	        if (tieneFilaElegidaReservas()&& tieneFilaElegidaHuespedes()) {
+	            JOptionPane.showMessageDialog(this, "Por favor, elije un item para Modificar");
 	            return;
 	        }
-	        
+	        if (tieneFilaElegidaReservas()==false) {
 	        Optional.ofNullable(modelo.getValueAt(tbReservas.getSelectedRow(), tbReservas.getSelectedColumn()))
 	                .ifPresentOrElse(fila -> {
 	                	//System.out.println("fila elejida: "+ tabla.getSelectedRowCount()+" y columna elejida: "+tabla.getSelectedColumn());
@@ -478,13 +480,34 @@ public class Busqueda extends JFrame {
 	                    
 	                    updateCount=this.reservaController.modificar(id,java.sql.Date.valueOf(fechaIn), java.sql.Date.valueOf(fechaOut), valor,formaDePago);
 	                    tbReservas.clearSelection();
-	        	        //tbHuespedes.clearSelection();	
+	                    //tbHuespedes.clearSelection();	
 						//System.out.println(tbHuespedes.getSelectedRowCount() == 0 || tbHuespedes.getSelectedColumnCount() == 0);
 	                    JOptionPane.showMessageDialog(this, updateCount+" Item modificado con éxito!");
 	                    
 	                }, () -> JOptionPane.showMessageDialog(this, "Por favor, elije un item Reserva2"));
 	        
-	        
+	    }else if (tieneFilaElegidaHuespedes()==false) {
+	    	Optional.ofNullable(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), tbHuespedes.getSelectedColumn()))
+	        .ifPresentOrElse(fila -> {
+	        	//System.out.println("fila elejida: "+ tabla.getSelectedRowCount()+" y columna elejida: "+tabla.getSelectedColumn());
+	            //Integer id = (Integer) modelo.getValueAt(tabla.getSelectedRow(), 0);
+	            Integer id = Integer.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 0).toString());//mia
+	            String nombre = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 1));
+	            String apellido = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 2));
+	            String fechaNacimiento = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 3));
+	            String nacionalidad = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 4));
+	            String telefono = String.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 5));
+	            //Integer cantidad = (Integer) modelo.getValueAt(tabla.getSelectedRow(), 3);//mia
+	            //Integer cantidad = Integer.valueOf( modelo.getValueAt(tbReservas.getSelectedRow(), 3).toString());//mia
+	            int updateCount;
+	            
+	            updateCount=this.huespedController.modificar(id,nombre,apellido,java.sql.Date.valueOf(fechaNacimiento),nacionalidad,telefono);
+					
+	            tbReservas.clearSelection();
+		        tbHuespedes.clearSelection();
+	            JOptionPane.showMessageDialog(this, updateCount+" Item modificado con éxito!");
+	        }, () -> JOptionPane.showMessageDialog(this, "Por favor, elije un item Huesped2"));
+	    }
 	        		
 	    }
 	    private void modificar2() {
@@ -518,20 +541,42 @@ public class Busqueda extends JFrame {
 		        tbHuespedes.clearSelection();
 	    	}
 	    private void eliminar() {
-	        if (tieneFilaElegidaReservas()) {
+	    	System.out.println("resrva= "+tieneFilaElegidaReservas());
+	    	System.out.println("husped= "+tieneFilaElegidaHuespedes());
+	        if (tieneFilaElegidaReservas() && tieneFilaElegidaHuespedes()) {
 	            JOptionPane.showMessageDialog(this, "Por favor, elije un item ");
 	            return;
-	        }
-
+	        }else if (tieneFilaElegidaReservas()==false) {
 	        Optional.ofNullable(modelo.getValueAt(tbReservas.getSelectedRow(),tbReservas.getSelectedColumn()))
 	                .ifPresentOrElse(fila -> {
 	                    Integer id = Integer.valueOf( modelo.getValueAt(tbReservas.getSelectedRow(), 0).toString());
 	                    int cantidadEliminada;
 	                    cantidadEliminada=this.reservaController.eliminar(id);
-						
+	                    tbReservas.clearSelection();
+	    		        tbHuespedes.clearSelection();
+	                    limpiarTabla();
+	                    cargarTablaHuespedes();
+	                    cargarTablaReservas();
+	                    
 	                    //modelo.removeRow(tbReservas.getSelectedRow());
 
 	                    JOptionPane.showMessageDialog(this, cantidadEliminada+" Item eliminado con éxito!");
 	                }, () -> JOptionPane.showMessageDialog(this, "Por favor, elije un item"));
+	    }else if (tieneFilaElegidaHuespedes()==false) {
+	    	Optional.ofNullable(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), tbHuespedes.getSelectedColumn()))
+	        .ifPresentOrElse(fila -> {
+	        	Integer id = Integer.valueOf(modeloHuesped.getValueAt(tbHuespedes.getSelectedRow(), 6).toString());
+	        	int cantidadEliminada;
+                cantidadEliminada=this.reservaController.eliminar(id);
+                tbReservas.clearSelection();
+		        tbHuespedes.clearSelection();
+                limpiarTabla();
+                
+                cargarTablaReservas();
+                cargarTablaHuespedes();
+	        	
+                JOptionPane.showMessageDialog(this, cantidadEliminada+" Item eliminado con éxito!");
+	        }, () -> JOptionPane.showMessageDialog(this, "Por favor, elije un item"));
+	    }
 	    }
 }

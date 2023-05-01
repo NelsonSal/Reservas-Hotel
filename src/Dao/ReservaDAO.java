@@ -59,7 +59,7 @@ public class ReservaDAO {
 
 	public List<Reserva> listar() {
 		List<Reserva> resultado = new ArrayList<>();
-		 ConnectionFactory factory = new ConnectionFactory();
+		ConnectionFactory factory = new ConnectionFactory();
 		 final Connection con =factory.recuperaConexion();
 		try (con) {
 			final PreparedStatement statement = con
@@ -79,7 +79,9 @@ public class ReservaDAO {
 					}
 				}
 			}
+			con.close();
 			return resultado;
+			
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -115,6 +117,7 @@ public class ReservaDAO {
 					}
 				} 
 			}
+			con.close();
 			return resultado;	
 		}catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -138,7 +141,7 @@ public class ReservaDAO {
 				statement.setInt(5, id_Reserva);
 				statement.execute();
 				int updateCount = statement.getUpdateCount();
-				
+				con.close();
 				return updateCount;
 			}
 		
@@ -157,7 +160,7 @@ public class ReservaDAO {
 				statement.execute();
 				int updateCount = statement.getUpdateCount(); 
 				System.out.println("Se elimino el producto con ID: "+ updateCount);
-				
+				con.close();
 				return updateCount;
 			}
 		}catch (SQLException e) {
