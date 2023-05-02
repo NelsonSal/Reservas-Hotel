@@ -1,8 +1,9 @@
 #   Hotel Alura | Sistema de Reservas
 
 
+   <p align="center" >
      [![Alt text](https://img.youtube.com/vi/DhK6Zo1NLcc/0.jpg)](https://www.youtube.com/watch?v=DhK6Zo1NLcc)
-
+</p>
 
 ---
 ##  Funcionalidades:
