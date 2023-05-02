@@ -87,7 +87,7 @@ public class Busqueda extends JFrame {
 		txtBuscar.setColumns(10);
 
 		JLabel lblNewLabel_4 = new JLabel("SISTEMA DE BÚSQUEDA");
-		lblNewLabel_4.setForeground(new Color(12, 138, 199));
+		lblNewLabel_4.setForeground(new Color(12, 150, 199));
 		lblNewLabel_4.setFont(new Font("Roboto Black", Font.BOLD, 24));
 		lblNewLabel_4.setBounds(331, 62, 280, 42);
 		contentPane.add(lblNewLabel_4);

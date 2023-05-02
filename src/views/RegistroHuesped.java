@@ -232,13 +232,13 @@ public class RegistroHuesped extends JFrame {
 		contentPane.add(txtTelefono);
 
 		JLabel lblTitulo = new JLabel("REGISTRO HUÉSPED");
-		lblTitulo.setBounds(606, 55, 234, 42);
+		lblTitulo.setBounds(580, 55, 260, 42);
 		lblTitulo.setForeground(new Color(12, 138, 199));
 		lblTitulo.setFont(new Font("Roboto Black", Font.PLAIN, 23));
 		contentPane.add(lblTitulo);
 
 		JLabel lblNumeroReserva = new JLabel("NÚMERO DE RESERVA");
-		lblNumeroReserva.setBounds(560, 474, 253, 14);
+		lblNumeroReserva.setBounds(540, 474, 270, 14);
 		lblNumeroReserva.setForeground(SystemColor.textInactiveText);
 		lblNumeroReserva.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		contentPane.add(lblNumeroReserva);
@@ -383,7 +383,7 @@ public class RegistroHuesped extends JFrame {
 				java.sql.Date.valueOf(fechaNacimiento), nacionalidad, txtTelefono.getText(), idReserva2);
 		try {
 			huespedController.guardarHuesped(huesped);
-			JOptionPane.showMessageDialog(this, "Se ha guardado el Huesped Exitosamente ");
+			JOptionPane.showMessageDialog(this, "Se ha guardado el Huesped Exitosamente con numero de Reserva: "+idReserva2);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, "No se ha guardado el Huesped");
 			e.printStackTrace();
