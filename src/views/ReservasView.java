@@ -19,6 +19,8 @@ import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.text.Format;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -44,7 +46,7 @@ public class ReservasView extends JFrame {
 	private JLabel labelAtras;
 	private ReservaController reservaController; 
 	private String valorReserva;
-
+	private static boolean control=true;
 	/**
 	 * Launch the application.
 	 */
@@ -279,13 +281,25 @@ public class ReservasView extends JFrame {
 
 			public void propertyChange(PropertyChangeEvent evt) {
 				//Activa el evento, después del usuario seleccionar las fechas se debe calcular el valor de la reserva
+				
 				Date dateIn = ReservasView.txtFechaEntrada.getDate();
 				Date dateOut = ReservasView.txtFechaSalida.getDate();
-				//System.out.println("Fecha-in: "+ dateIn  );
-				//System.out.println("Fecha-out: "+ dateOut);
 				if (dateIn != null && dateOut != null ) {
+					LocalDate todaysDate= (LocalDate.now());
+					Date hoy=java.sql.Date.valueOf(todaysDate);
+					Date fechaIn=java.sql.Date.valueOf(((JTextField)txtFechaEntrada.getDateEditor().getUiComponent()).getText());
+					
+					boolean isBeforeToday =hoy.after(fechaIn);
+					if (isBeforeToday) {
+						JOptionPane.showMessageDialog(null, "La Fecha de Entrada debe ser hoy o en el futuro");
+						
+						dateIn.setTime(0);
+						dateOut.setTime(0);
+						ReservasView frame = new ReservasView();
+						frame.setVisible(true);
+						dispose();
+					}
 					boolean isAfter = dateOut.after(dateIn);
-					//System.out.println(isAfter );
 					if (isAfter) {
 						//Realiza calculo de dias y valor de reserva
 						long fechaInicialMs = dateIn.getTime();
@@ -297,10 +311,13 @@ public class ReservasView extends JFrame {
 						
 						//manda el mensaje si las fechas estan mal seleccionadas
 						JOptionPane.showMessageDialog(null, "La Fecha de Salida debe ser posterior  a la de entrada");
+						ReservasView frame = new ReservasView();
+						frame.setVisible(true);
+						dispose();
 					}
-				}
-				
-				
+						
+				}	
+
 			}
 		});
 		
@@ -328,11 +345,7 @@ public class ReservasView extends JFrame {
 		btnsiguiente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
-					//System.out.println(txtFormaPago.getSelectedItem());
-					//System.out.println(valorReserva);
-					//System.out.println(txtFechaEntrada.getDate());
-					//System.out.println(txtFechaSalida.getDate());
+				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {
 					guardarReserva();
 					
 				} else {
@@ -375,7 +388,6 @@ public class ReservasView extends JFrame {
 	    	Reserva nuevaReserva = new Reserva(java.sql.Date.valueOf(fechaIn),java.sql.Date.valueOf(fechaOut),valorReserva,FormaPago);
 	    	reservaController.guardarReserva(nuevaReserva);
 	    	JOptionPane.showMessageDialog(this, "Se ha guardado la Reserva " + nuevaReserva.getIdReserva() );
-	    	//System.out.println("aca"+nuevaReserva.getIdReserva());
 	    	RegistroHuesped registro = new RegistroHuesped(nuevaReserva.getIdReserva());
 			registro.setVisible(true);
 			dispose();

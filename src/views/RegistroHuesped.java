@@ -1,46 +1,46 @@
 package views;
 
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
 import java.awt.Color;
-import com.toedter.calendar.JDateChooser;
-
-import Controller.HuespedController;
-import Controller.ReservaController;
-import modelo.Huesped;
-
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import java.awt.SystemColor;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.sql.Date;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.Format;
-import java.awt.event.ActionEvent;
-import java.awt.Toolkit;
-import javax.swing.SwingConstants;
+import java.time.LocalDate;
+import java.util.Date;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import com.toedter.calendar.JDateChooser;
+
+import Controller.HuespedController;
+import modelo.Huesped;
 
 @SuppressWarnings("serial")
 public class RegistroHuesped extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtNombre;
-	private JTextField txtApellido;
-	private JTextField txtTelefono;
-	private JTextField txtNreserva;
-	private JDateChooser txtFechaN;
-	private JComboBox<Format> txtNacionalidad;
+	private static JTextField txtNombre;
+	private static JTextField txtApellido;
+	private static JTextField txtTelefono;
+	private static JTextField txtNreserva;
+	private static JDateChooser txtFechaN;
+	private static JComboBox<Format> txtNacionalidad;
 	private JLabel labelExit;
 	private JLabel labelAtras;
 	int xMouse, yMouse;
@@ -78,8 +78,8 @@ public class RegistroHuesped extends JFrame {
 		setLocationRelativeTo(null);
 		setUndecorated(true);
 		contentPane.setLayout(null);
-		
-		this.huespedController= new HuespedController();
+
+		this.huespedController = new HuespedController();
 
 		JPanel header = new JPanel();
 		header.setBounds(0, 0, 910, 36);
@@ -158,7 +158,19 @@ public class RegistroHuesped extends JFrame {
 		txtFechaN.getCalendarButton().setBackground(SystemColor.textHighlight);
 		txtFechaN.setDateFormatString("yyyy-MM-dd");
 		contentPane.add(txtFechaN);
-
+		txtFechaN.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (RegistroHuesped.txtFechaN.getDate() != null) {
+				LocalDate todaysDate= (LocalDate.now());
+				Date hoy=java.sql.Date.valueOf(todaysDate);
+				Date fechaNacido=java.sql.Date.valueOf(((JTextField)txtFechaN.getDateEditor().getUiComponent()).getText());
+				boolean isBeforeToday2 =hoy.before(fechaNacido);
+				if (isBeforeToday2) {
+					JOptionPane.showMessageDialog(null, "La Fecha de Nacimiento debe ser hoy o en el pasado, por favor corrija");
+				}
+				}
+			}
+		});
 		txtNacionalidad = new JComboBox();
 		txtNacionalidad.setBounds(560, 350, 289, 36);
 		txtNacionalidad.setBackground(SystemColor.text);
@@ -281,15 +293,18 @@ public class RegistroHuesped extends JFrame {
 
 		JPanel btnguardar = new JPanel();
 		btnguardar.setBounds(723, 560, 122, 35);
-		btnguardar.addMouseListener(new MouseAdapter() {
+		btnguardar.addMouseListener(new MouseAdapter() {// abre 1
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
-				guardarHuesped();
-				MenuUsuario usuario = new MenuUsuario();
-				usuario.setVisible(true);
-				dispose();
-				
+				if(RegistroHuesped.txtFechaN.getDate() != null && txtNombre.getText().length()!=0 && txtApellido.getText().length()!=0 &&
+						txtTelefono.getText().length()!=0) {
+					guardarHuesped();
+					MenuUsuario usuario = new MenuUsuario();
+					usuario.setVisible(true);
+					dispose();
+				}else {
+					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
+				}
 			}
 		});
 		btnguardar.setLayout(null);
@@ -360,20 +375,23 @@ public class RegistroHuesped extends JFrame {
 	}
 
 	private void guardarHuesped() {
-		String nombre=(String)(txtNombre.getText());
+		
 		String fechaNacimiento = ((JTextField) txtFechaN.getDateEditor().getUiComponent()).getText();
 		String nacionalidad = (String) (txtNacionalidad.getSelectedItem());
 		int idReserva2 = Integer.parseInt(txtNreserva.getText());
 		Huesped huesped = new Huesped(txtNombre.getText(), txtApellido.getText(),
-				java.sql.Date.valueOf(fechaNacimiento), nacionalidad, txtTelefono.getText(),
-				idReserva2);
-		huespedController.guardarHuesped(huesped);
-		JOptionPane.showMessageDialog(this, "Se ha guardado el Huesped Exitosamente ");
-		;
-	}
+				java.sql.Date.valueOf(fechaNacimiento), nacionalidad, txtTelefono.getText(), idReserva2);
+		try {
+			huespedController.guardarHuesped(huesped);
+			JOptionPane.showMessageDialog(this, "Se ha guardado el Huesped Exitosamente ");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "No se ha guardado el Huesped");
+			e.printStackTrace();
+		}
 
-	// Código que permite mover la ventana por la pantalla según la posición de "x"
-	// y "y"
+	}// Código que permite mover la ventana por la pantalla según la posición de "x"
+		// y "y"
+
 	private void headerMousePressed(java.awt.event.MouseEvent evt) {
 		xMouse = evt.getX();
 		yMouse = evt.getY();

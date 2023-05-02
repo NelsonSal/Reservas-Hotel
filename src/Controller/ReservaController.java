@@ -14,8 +14,6 @@ import modelo.Reserva;
 public class ReservaController {
 	private Reserva reserva;
 	private ReservaDAO reservaDao;
-	
-	//Reserva reserva = new Reserva();
 	public ReservaController() {
 		this.reservaDao = new ReservaDAO(new ConnectionFactory().recuperaConexion());
 	}
@@ -39,7 +37,6 @@ public class ReservaController {
 	}
 
 	public int modificar(Integer Id_Reserva, Date fechaIn, Date fechaOut, String valor, String formaDePago) {
-		// TODO Auto-generated method stub
 		return reservaDao.modificarReserva(Id_Reserva,fechaIn,fechaOut,valor,formaDePago);
 	}
 

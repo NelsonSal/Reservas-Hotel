@@ -35,11 +35,7 @@ public Reserva(int idReserva, Date fechaIn, Date fechaOut, String valorReserva, 
 		this.formaDePago = formaDePago;
 	}
 
-//	public double cantDias (long fechaIn, long fechaOut) {
-//		long diferencia = fechaOut - fechaIn;
-//		double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-//		return dias;
-//	}
+
 	
 	public Date getFechaIn() {
 		return fechaIn;
@@ -84,6 +80,7 @@ public Reserva(int idReserva, Date fechaIn, Date fechaOut, String valorReserva, 
 	public double valorReserva(long fechaIn, long fechaOut) {
 		long diferencia = fechaOut - fechaIn;
 		double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+		if (dias==0) {dias=1;}
 		double valor=tarifa*dias;
 		return valor;
 	}
